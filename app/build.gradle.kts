@@ -51,4 +51,9 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     debugImplementation(libs.androidx.compose.ui.tooling)
+
+        // Dependencia recomendada para Compose Material 3 Adaptive
+    implementation("androidx.compose.material3:material3-window-size-class")
+    implementation("androidx.activity:activity-compose:1.9.1")
+
 }
