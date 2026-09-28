@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.kaiju_grupo3.ui.HomeScreen
 import com.example.kaiju_grupo3.ui.screens.MainInvetarioScreen
 import com.example.kaiju_grupo3.ui.theme.Kaiju_grupo3Theme
 
@@ -20,7 +21,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             Kaiju_grupo3Theme {
-                MainInvetarioScreen()
+                HomeScreen()
                 }
             }
         }
