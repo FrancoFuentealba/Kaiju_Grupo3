@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -36,6 +37,7 @@ android {
 }
 
 dependencies {
+    // --- Compose / Material 3 ---
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.material3)
@@ -43,7 +45,25 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.core.ktx)
+    implementation("androidx.compose.material3:material3-window-size-class") // Window Size Classes (guía 9)
+    implementation("androidx.compose.material:material-icons-extended")
+
+    // --- Lifecycle / ViewModel ---
     implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+
+    // --- Navegación ---
+    implementation("androidx.navigation:navigation-compose:2.7.7")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+
+    // --- Almacenamiento local ---
+    implementation("androidx.datastore:datastore-preferences:1.1.0") // preferencias (guía 12)
+    implementation(libs.androidx.room.runtime)                       // base de datos del inventario
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
+
+    // --- Tests ---
     testImplementation(libs.junit)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
@@ -52,16 +72,4 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     debugImplementation(libs.androidx.compose.ui.tooling)
 
-        // Dependencia recomendada para Compose Material 3 Adaptive
-    implementation("androidx.compose.material3:material3-window-size-class")
-    implementation("androidx.activity:activity-compose:1.9.1")
-
-    //Imports para usar en guia 10
-    implementation("androidx.navigation:navigation-compose:2.7.7")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.0-rc02")
-    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.2")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
-    implementation("androidx.compose.material:material-icons-extended")
-
-    implementation("androidx.datastore:datastore-preferences:1.1.0")
 }
