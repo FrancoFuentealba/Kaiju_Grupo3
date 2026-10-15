@@ -1,22 +1,26 @@
 package com.example.kaiju_grupo3.navigation
 
-//sealed class para rutas seguras en la navegacion
+// sealed class para rutas seguras en la navegación
 sealed class Screen(val route: String) {
-    //ruta para pantalla de inicio
-    data object Home : Screen(route = "home_page")
-    //ruta para pantalla de perfil
-    data object Profile : Screen(route = "profile_page")
-    //ruta de pantalla configuracion
-    data object Settings : Screen(route = "settings_page")
-    //ruta para pantalla de inicio de sesion
 
+    // --- Acceso ---
     data object Login : Screen(route = "login")
-    //ruta para pantalla de registro (formulario)
-
     data object Registro : Screen(route = "registro")
-    //ruta para pantalla de resumen (datos ingresados)
-
-
-
     data object Resumen : Screen(route = "resumen")
+
+    // --- Pestañas principales  ---
+    data object Inventario : Screen(route = "inventario")
+    data object Movimientos : Screen(route = "movimientos")
+    data object Profile : Screen(route = "profile_page")
+
+    // --- Otras pantallas ---
+    data object Settings : Screen(route = "settings_page")
+
+    // Pantalla con argumento: Screen.Detalle(5) navega a "producto/5".
+    data class Detalle(val productoId: Long) : Screen(route = "producto/$productoId") {
+        companion object {
+            const val ARG_ID = "productoId"
+            const val RUTA = "producto/{$ARG_ID}"   // patrón que se declara en el NavHost
+        }
+    }
 }
