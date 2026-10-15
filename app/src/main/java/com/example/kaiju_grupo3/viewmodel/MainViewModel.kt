@@ -1,38 +1,48 @@
 package com.example.kaiju_grupo3.viewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.kaiju_grupo3.navigation.NavigationEvent
 import com.example.kaiju_grupo3.navigation.Screen
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class MainViewModel : ViewModel(){
+// Emite eventos de navegación; MainActivity los escucha y mueve el NavController.
+class MainViewModel : ViewModel() {
 
     private val _navigationEvents = MutableSharedFlow<NavigationEvent>()
     val navigationEvents: SharedFlow<NavigationEvent> = _navigationEvents.asSharedFlow()
 
-    //funcion para el evento de navegacion hacia la ruta deseada
-    fun navigateTo(screen: Screen) {
-        CoroutineScope(Dispatchers.Main).launch {
-            _navigationEvents.emit(NavigationEvent.NavigateTo(route = screen))
+    // Navega a una pantalla.
+    //  - popUpTo / inclusive: limpia la pila hasta esa pantalla (por ejemplo al cerrar sesión).
+    //  - singleTop: evita apilar la misma pantalla dos veces (por ejemplo al tocar la misma pestaña).
+    fun navigateTo(
+        screen: Screen,
+        popUpTo: Screen? = null,
+        inclusive: Boolean = false,
+        singleTop: Boolean = false
+    ) {
+        viewModelScope.launch {
+            _navigationEvents.emit(
+                NavigationEvent.NavigateTo(
+                    route = screen,
+                    popUpToRoute = popUpTo,
+                    inclusive = inclusive,
+                    singleTop = singleTop
+                )
+            )
         }
     }
 
-    //funcion de volver atras
+    // Volver a la pantalla anterior
     fun navigationBack() {
-        CoroutineScope(Dispatchers.Main).launch {
-            _navigationEvents.emit(NavigationEvent.PopBackStack)
-        }
+        viewModelScope.launch { _navigationEvents.emit(NavigationEvent.PopBackStack) }
     }
 
-    //funcion para navegar hacia arriba
+    // Navegar hacia "arriba"
     fun navigationUp() {
-        CoroutineScope(Dispatchers.Main).launch {
-            _navigationEvents.emit(NavigationEvent.NavigateUp)
-        }
+        viewModelScope.launch { _navigationEvents.emit(NavigationEvent.NavigateUp) }
     }
 }
