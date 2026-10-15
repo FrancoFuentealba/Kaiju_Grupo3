@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -30,6 +31,7 @@ fun LoginScreen(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .safeDrawingPadding()
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterVertically),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -53,8 +55,8 @@ fun LoginScreen(navController: NavController) {
 
         Button(
             onClick = {
-                // vuelve al home de momento
-                navController.navigate(Screen.Home.route) {
+                // entra al inventario y quita el login de la pila (no se vuelve con "atrás")
+                navController.navigate(Screen.Inventario.route) {
                     popUpTo(Screen.Login.route) { inclusive = true }
                 }
             },

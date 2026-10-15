@@ -2,6 +2,7 @@ package com.example.kaiju_grupo3.ui.screens
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -16,7 +17,7 @@ fun ResumenScreen(viewModel: UsuarioViewModel) {
     // Lee el MISMO ViewModel que usa el registro, por eso ve los mismos datos
     val estado by viewModel.estado.collectAsState()
 
-    Column(Modifier.padding(16.dp)) {
+    Column(Modifier.safeDrawingPadding().padding(16.dp)) {
         Text("Resumen del Registro", style = MaterialTheme.typography.headlineMedium)
         Text("Nombre: ${estado.nombre}")
         Text("Correo: ${estado.correo}")
