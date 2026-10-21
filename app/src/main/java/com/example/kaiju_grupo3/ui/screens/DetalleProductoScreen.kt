@@ -135,7 +135,7 @@ private fun FotoProductoPlaceholder() {
 }
 
 @Composable
-private fun TarjetaStock(producto: Producto) {
+ fun TarjetaStock(producto: Producto) {
     val bajo = producto.stockBajo
     ElevatedCard(modifier = Modifier.fillMaxWidth()) {
         Column(
@@ -172,7 +172,7 @@ private fun TarjetaStock(producto: Producto) {
 }
 
 @Composable
-private fun TarjetaDatos(producto: Producto) {
+ fun TarjetaDatos(producto: Producto) {
     ElevatedCard(modifier = Modifier.fillMaxWidth()) {
         Column(
             modifier = Modifier.padding(16.dp),
