@@ -9,8 +9,12 @@ import com.example.kaiju_grupo3.model.ReglasStock
 import com.example.kaiju_grupo3.model.TipoMovimiento
 import kotlinx.coroutines.flow.Flow
 
+// Error específico: ya existe otro producto con ese código.
+class CodigoDuplicadoException(codigo: String) :
+    Exception("Ya existe un producto con el código $codigo")
+
 // Repositorio: único punto de acceso a los datos del inventario.
-// Los ViewModels hablan con esta clase.
+// Los ViewModels hablan con esta clase y no con Room directamente.
 class InventarioRepository(private val db: KaijuDatabase) {
 
     private val productoDao = db.productoDao()
@@ -24,17 +28,34 @@ class InventarioRepository(private val db: KaijuDatabase) {
     fun observarMovimientosDe(productoId: Long): Flow<List<Movimiento>> =
         movimientoDao.observarPorProducto(productoId)
 
-    // Crea o edita un producto (id == 0 significa producto nuevo). Rechaza códigos repetidos.
-    // OJO: el stock solo debe cambiar mediante registrarMovimiento, para no perder trazabilidad.
-    suspend fun guardarProducto(producto: Producto): Result<Long> {
-        if (productoDao.contarPorCodigo(producto.codigo, producto.id) > 0) {
-            return Result.failure(IllegalArgumentException("Ya existe un producto con el código ${producto.codigo}"))
+    suspend fun obtenerProducto(id: Long): Producto? = productoDao.obtenerPorId(id)
+
+    // Crea un producto nuevo. Si trae stock inicial, lo registra como un movimiento de ENTRADA
+    // para que el stock siempre tenga trazabilidad. Todo en una transacción.
+    suspend fun crearProducto(producto: Producto, stockInicial: Int): Result<Long> = runCatching {
+        db.withTransaction {
+            if (productoDao.contarPorCodigo(producto.codigo, 0) > 0) {
+                throw CodigoDuplicadoException(producto.codigo)
+            }
+            val id = productoDao.insertar(producto.copy(id = 0, stock = 0))
+            if (stockInicial > 0) {
+                registrarMovimiento(id, TipoMovimiento.ENTRADA, stockInicial, "Stock inicial").getOrThrow()
+            }
+            id
         }
-        return if (producto.id == 0L) {
-            Result.success(productoDao.insertar(producto))
-        } else {
-            productoDao.actualizar(producto)
-            Result.success(producto.id)
+    }
+
+    // Edita un producto existente. El stock NO se toca aquí: se conserva el que hay en la base
+    // y solo cambia con registrarMovimiento (así no se pierde la trazabilidad).
+    suspend fun guardarProducto(producto: Producto): Result<Long> = runCatching {
+        db.withTransaction {
+            if (productoDao.contarPorCodigo(producto.codigo, producto.id) > 0) {
+                throw CodigoDuplicadoException(producto.codigo)
+            }
+            val actual = productoDao.obtenerPorId(producto.id)
+                ?: throw IllegalArgumentException("El producto no existe")
+            productoDao.actualizar(producto.copy(stock = actual.stock))
+            producto.id
         }
     }
 

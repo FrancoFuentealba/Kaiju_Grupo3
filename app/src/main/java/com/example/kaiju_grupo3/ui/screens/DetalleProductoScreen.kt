@@ -7,17 +7,18 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Inventory2
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.SwapVert
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
@@ -35,13 +36,15 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.kaiju_grupo3.model.Producto
 import com.example.kaiju_grupo3.model.stockBajo
+import com.example.kaiju_grupo3.navigation.Screen
+import com.example.kaiju_grupo3.ui.components.ImagenInteligente
 import com.example.kaiju_grupo3.ui.components.MovimientoCard
 import com.example.kaiju_grupo3.ui.components.StockBajoBadge
 import com.example.kaiju_grupo3.ui.utils.formatearPrecio
 import com.example.kaiju_grupo3.viewmodel.InventarioViewModel
 import com.example.kaiju_grupo3.viewmodel.MainViewModel
 
-// Detalle de un producto: datos, nivel de stock e historial de sus movimientos.
+// Detalle de un producto: foto, datos, nivel de stock e historial de sus movimientos.
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetalleProductoScreen(
@@ -64,11 +67,24 @@ fun DetalleProductoScreen(
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Volver")
                     }
                 },
+                actions = {
+                    IconButton(onClick = { mainViewModel.navigateTo(Screen.ProductoEditar(productoId)) }) {
+                        Icon(Icons.Filled.Edit, contentDescription = "Editar producto")
+                    }
+                },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primary,
                     titleContentColor = MaterialTheme.colorScheme.onPrimary,
-                    navigationIconContentColor = MaterialTheme.colorScheme.onPrimary
+                    navigationIconContentColor = MaterialTheme.colorScheme.onPrimary,
+                    actionIconContentColor = MaterialTheme.colorScheme.onPrimary
                 )
+            )
+        },
+        floatingActionButton = {
+            ExtendedFloatingActionButton(
+                onClick = { mainViewModel.navigateTo(Screen.MovimientoNuevo(productoId)) },
+                icon = { Icon(Icons.Filled.SwapVert, contentDescription = null) },
+                text = { Text("Registrar movimiento") }
             )
         }
     ) { innerPadding ->
@@ -87,10 +103,19 @@ fun DetalleProductoScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(innerPadding),
-                contentPadding = PaddingValues(16.dp),
+                // Espacio abajo para que el botón flotante no tape el último movimiento
+                contentPadding = PaddingValues(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 88.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                item { FotoProductoPlaceholder() }
+                item {
+                    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                        ImagenInteligente(
+                            fotoUri = actual.fotoUri,
+                            modifier = Modifier.size(180.dp),
+                            maxLadoPx = 720
+                        )
+                    }
+                }
                 item { TarjetaStock(actual) }
                 item { TarjetaDatos(actual) }
                 item {
@@ -113,24 +138,6 @@ fun DetalleProductoScreen(
                 }
             }
         }
-    }
-}
-
-// Espacio para la foto del producto. En el paso 5 se reemplaza por la imagen tomada con la cámara.
-@Composable
-private fun FotoProductoPlaceholder() {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(160.dp),
-        contentAlignment = Alignment.Center
-    ) {
-        Icon(
-            imageVector = Icons.Filled.Inventory2,
-            contentDescription = "Producto sin foto",
-            modifier = Modifier.size(96.dp),
-            tint = MaterialTheme.colorScheme.primary
-        )
     }
 }
 
@@ -212,3 +219,4 @@ private fun FilaDato(etiqueta: String, valor: String) {
         )
     }
 }
+

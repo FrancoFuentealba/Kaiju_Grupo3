@@ -48,7 +48,7 @@ private val tabs = listOf(
 )
 
 // Estructura común de las 3 pestañas principales:
-// barra superior con botón de menú + menú lateral + barra de navegación inferior.
+// barra superior con botón de menú + menú lateral (drawer) + barra de navegación inferior.
 // Como solo hay UN Scaffold por pantalla, no se duplican los márgenes del sistema.
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -56,6 +56,7 @@ fun KaijuTabScaffold(
     titulo: String,
     tabActual: Screen,
     viewModel: MainViewModel,
+    floatingActionButton: @Composable () -> Unit = {},
     content: @Composable (PaddingValues) -> Unit
 ) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -134,7 +135,9 @@ fun KaijuTabScaffold(
                     }
                 }
             },
+            floatingActionButton = floatingActionButton,
             content = content
         )
     }
 }
+

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -34,6 +35,12 @@ fun ProductoCard(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
+            // Miniatura: foto del producto o ícono por defecto
+            ImagenInteligente(
+                fotoUri = producto.fotoUri,
+                modifier = Modifier.size(56.dp),
+                maxLadoPx = 160
+            )
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = producto.nombre,
