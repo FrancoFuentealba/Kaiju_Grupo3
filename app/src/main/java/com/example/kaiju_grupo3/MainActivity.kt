@@ -4,7 +4,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -14,8 +17,8 @@ import androidx.navigation.navArgument
 import com.example.kaiju_grupo3.navigation.NavigationEvent
 import com.example.kaiju_grupo3.navigation.Screen
 import com.example.kaiju_grupo3.ui.screens.DetalleProductoScreen
-import com.example.kaiju_grupo3.ui.screens.InventarioScreen
 import com.example.kaiju_grupo3.ui.screens.LoginScreen
+import com.example.kaiju_grupo3.ui.screens.MainInventarioScreen
 import com.example.kaiju_grupo3.ui.screens.MovimientoFormScreen
 import com.example.kaiju_grupo3.ui.screens.MovimientosScreen
 import com.example.kaiju_grupo3.ui.screens.ProductoFormScreen
@@ -42,15 +45,13 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
 
                 // Escucha los eventos de navegación que emite el MainViewModel.
-                LaunchedEffect(key1 = Unit) {
+                LaunchedEffect(Unit) {
                     mainViewModel.navigationEvents.collectLatest { event ->
                         when (event) {
                             is NavigationEvent.NavigateTo -> {
                                 navController.navigate(event.route.route) {
                                     event.popUpToRoute?.let { target ->
-                                        popUpTo(target.route) {
-                                            inclusive = event.inclusive
-                                        }
+                                        popUpTo(target.route) { inclusive = event.inclusive }
                                     }
                                     launchSingleTop = event.singleTop
                                 }
@@ -61,78 +62,63 @@ class MainActivity : ComponentActivity() {
                     }
                 }
 
-                // Cada pantalla tiene su propio Scaffold, por eso el NavHost no lleva Scaffold externo.
-                NavHost(
-                    navController = navController,
-                    startDestination = Screen.Login.route
-                ) {
-                    composable(route = Screen.Login.route) {
-                        LoginScreen(navController = navController)
-                    }
-                    composable(route = Screen.Registro.route) {
-                        RegistroScreen(navController = navController, viewModel = usuarioViewModel)
-                    }
-                    composable(route = Screen.Resumen.route) {
-                        ResumenScreen(viewModel = usuarioViewModel)
-                    }
+                // Cada pantalla maneja su propio padding (KaijuTabScaffold / safeDrawingPadding)
+                Scaffold(modifier = Modifier.fillMaxSize()) { _ ->
+                    NavHost(
+                        navController = navController,
+                        startDestination = Screen.Login.route
+                    ) {
+                        composable(Screen.Login.route) {
+                            LoginScreen(navController = navController)
+                        }
+                        composable(Screen.Registro.route) {
+                            RegistroScreen(navController = navController, viewModel = usuarioViewModel)
+                        }
+                        composable(Screen.Resumen.route) {
+                            ResumenScreen(viewModel = usuarioViewModel)
+                        }
 
-                    // --- Pestañas principales ---
-                    composable(route = Screen.Inventario.route) {
-                        InventarioScreen(
-                            mainViewModel = mainViewModel,
-                            inventarioViewModel = inventarioViewModel
-                        )
-                    }
-                    composable(route = Screen.Movimientos.route) {
-                        MovimientosScreen(
-                            mainViewModel = mainViewModel,
-                            inventarioViewModel = inventarioViewModel
-                        )
-                    }
-                    composable(route = Screen.Profile.route) {
-                        ProfileScreen(viewModel = mainViewModel)
-                    }
+                        // --- Pestañas principales ---
+                        composable(Screen.Inventario.route) {
+                            MainInventarioScreen(mainViewModel, inventarioViewModel)
+                        }
+                        composable(Screen.Movimientos.route) {
+                            MovimientosScreen(mainViewModel, inventarioViewModel)
+                        }
+                        composable(Screen.Profile.route) {
+                            ProfileScreen(viewModel = mainViewModel)
+                        }
+                        composable(Screen.Settings.route) {
+                            SettingsScreen(viewModel = mainViewModel)
+                        }
 
-                    // --- Pantalla con argumento: producto/{productoId} ---
-                    composable(
-                        route = Screen.Detalle.RUTA,
-                        arguments = listOf(
-                            navArgument(Screen.Detalle.ARG_ID) { type = NavType.LongType }
-                        )
-                    ) { backStackEntry ->
-                        val productoId = backStackEntry.arguments?.getLong(Screen.Detalle.ARG_ID) ?: -1L
-                        DetalleProductoScreen(
-                            productoId = productoId,
-                            mainViewModel = mainViewModel,
-                            inventarioViewModel = inventarioViewModel
-                        )
-                    }
+                        // --- Pantalla con argumento: producto/{productoId} ---
+                        composable(
+                            route = Screen.Detalle.RUTA,
+                            arguments = listOf(navArgument(Screen.Detalle.ARG_ID) { type = NavType.LongType })
+                        ) { backStackEntry ->
+                            val id = backStackEntry.arguments?.getLong(Screen.Detalle.ARG_ID) ?: -1L
+                            DetalleProductoScreen(id, mainViewModel, inventarioViewModel)
+                        }
 
-                    // --- Formularios ---
-                    composable(route = Screen.ProductoNuevo.route) {
-                        ProductoFormScreen(productoId = null, mainViewModel = mainViewModel)
-                    }
-                    composable(
-                        route = Screen.ProductoEditar.RUTA,
-                        arguments = listOf(
-                            navArgument(Screen.ProductoEditar.ARG_ID) { type = NavType.LongType }
-                        )
-                    ) { backStackEntry ->
-                        val productoId = backStackEntry.arguments?.getLong(Screen.ProductoEditar.ARG_ID) ?: -1L
-                        ProductoFormScreen(productoId = productoId, mainViewModel = mainViewModel)
-                    }
-                    composable(
-                        route = Screen.MovimientoNuevo.RUTA,
-                        arguments = listOf(
-                            navArgument(Screen.MovimientoNuevo.ARG_ID) { type = NavType.LongType }
-                        )
-                    ) { backStackEntry ->
-                        val productoId = backStackEntry.arguments?.getLong(Screen.MovimientoNuevo.ARG_ID) ?: -1L
-                        MovimientoFormScreen(productoId = productoId, mainViewModel = mainViewModel)
-                    }
-
-                    composable(route = Screen.Settings.route) {
-                        SettingsScreen(viewModel = mainViewModel)
+                        // --- Formularios ---
+                        composable(Screen.ProductoNuevo.route) {
+                            ProductoFormScreen(productoId = null, mainViewModel = mainViewModel)
+                        }
+                        composable(
+                            route = Screen.ProductoEditar.RUTA,
+                            arguments = listOf(navArgument(Screen.ProductoEditar.ARG_ID) { type = NavType.LongType })
+                        ) { backStackEntry ->
+                            val productoId = backStackEntry.arguments?.getLong(Screen.ProductoEditar.ARG_ID) ?: -1L
+                            ProductoFormScreen(productoId = productoId, mainViewModel = mainViewModel)
+                        }
+                        composable(
+                            route = Screen.MovimientoNuevo.RUTA,
+                            arguments = listOf(navArgument(Screen.MovimientoNuevo.ARG_ID) { type = NavType.LongType })
+                        ) { backStackEntry ->
+                            val productoId = backStackEntry.arguments?.getLong(Screen.MovimientoNuevo.ARG_ID) ?: -1L
+                            MovimientoFormScreen(productoId = productoId, mainViewModel = mainViewModel)
+                        }
                     }
                 }
             }
