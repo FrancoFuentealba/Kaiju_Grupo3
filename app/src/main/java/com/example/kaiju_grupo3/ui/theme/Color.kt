@@ -2,9 +2,7 @@ package com.example.kaiju_grupo3.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-// Paleta Kaiju (cajas naranjas, pallet amarillo, check verde).
-
-// ----- Tema claro -----
+// Tema claro de la app :D
 val KaijuPrimary = Color(0xFFB45309)
 val KaijuOnPrimary = Color(0xFFFFFFFF)
 val KaijuPrimaryContainer = Color(0xFFFFDDBF)
@@ -23,7 +21,7 @@ val KaijuSurfaceVariant = Color(0xFFF4DFD0)
 val KaijuOnSurfaceVariant = Color(0xFF51443A)
 val KaijuOutline = Color(0xFF84746A)
 
-// ----- Tema oscuro -----
+// Tema Noche de la App
 val KaijuPrimaryDark = Color(0xFFFFB77C)
 val KaijuOnPrimaryDark = Color(0xFF4E2600)
 val KaijuPrimaryContainerDark = Color(0xFF703800)

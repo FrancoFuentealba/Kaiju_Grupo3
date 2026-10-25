@@ -4,8 +4,8 @@ import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 
-// Tabla "productos" de la base de datos local.
-// El código es único, no pueden existir dos productos con el mismo código.
+
+// El código es único, no pueden existic dos productos con el mismo codigo.
 @Entity(
     tableName = "productos",
     indices = [Index(value = ["codigo"], unique = true)]
@@ -16,19 +16,18 @@ data class Producto(
     val nombre: String,
     val descripcion: String = "",
     val categoria: String,
-    val tipo: String,                 // tipo de producto,  terminado, insumo, perecible...
+    val tipo: String,                 // tipo de producto
     val precio: Int,                  // en pesos chilenos
     val stock: Int = 0,               // cantidad disponible
-    val stockMinimo: Int = 0,         // bajo este nivel se alerta reposición
-    // Atributos opcionales según el tipo de producto
+    val stockMinimo: Int = 0,         // bajo este nivel se alerta reposicion
     val talla: String? = null,
     val color: String? = null,
     val modelo: String? = null,
     val lote: String? = null,
     val vencimiento: String? = null,
-    val fotoUri: String? = null       // foto tomada con la cámara
+    val fotoUri: String? = null       // foto tomada con la camara
 )
 
-// Un producto tiene stock bajo cuando llega por debajo de su stock mínimo.
+// Un producto tiene stock bajo cuando llega por debajo de su stock minimo.
 val Producto.stockBajo: Boolean
     get() = stock <= stockMinimo

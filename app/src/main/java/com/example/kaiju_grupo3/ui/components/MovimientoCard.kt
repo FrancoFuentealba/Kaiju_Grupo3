@@ -28,8 +28,6 @@ import com.example.kaiju_grupo3.model.Movimiento
 import com.example.kaiju_grupo3.model.TipoMovimiento
 import com.example.kaiju_grupo3.ui.utils.formatearFecha
 
-// Fila del historial de movimientos.
-// nombreProducto = null cuando ya se está mostrando dentro del detalle de un producto.
 @Composable
 fun MovimientoCard(
     movimiento: Movimiento,

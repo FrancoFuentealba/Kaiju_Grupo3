@@ -9,12 +9,9 @@ import com.example.kaiju_grupo3.model.ReglasStock
 import com.example.kaiju_grupo3.model.TipoMovimiento
 import kotlinx.coroutines.flow.Flow
 
-// Error específico: ya existe otro producto con ese código.
 class CodigoDuplicadoException(codigo: String) :
     Exception("Ya existe un producto con el código $codigo")
 
-// Repositorio: único punto de acceso a los datos del inventario.
-// Los ViewModels hablan con esta clase y no con Room directamente.
 class InventarioRepository(private val db: KaijuDatabase) {
 
     private val productoDao = db.productoDao()
@@ -30,8 +27,7 @@ class InventarioRepository(private val db: KaijuDatabase) {
 
     suspend fun obtenerProducto(id: Long): Producto? = productoDao.obtenerPorId(id)
 
-    // Crea un producto nuevo. Si trae stock inicial, lo registra como un movimiento de ENTRADA
-    // para que el stock siempre tenga trazabilidad. Todo en una transacción.
+    // Esto trae stock inicial, lo registra como un movimiento de ENTRADA
     suspend fun crearProducto(producto: Producto, stockInicial: Int): Result<Long> = runCatching {
         db.withTransaction {
             if (productoDao.contarPorCodigo(producto.codigo, 0) > 0) {
@@ -45,8 +41,7 @@ class InventarioRepository(private val db: KaijuDatabase) {
         }
     }
 
-    // Edita un producto existente. El stock NO se toca aquí: se conserva el que hay en la base
-    // y solo cambia con registrarMovimiento (así no se pierde la trazabilidad).
+
     suspend fun guardarProducto(producto: Producto): Result<Long> = runCatching {
         db.withTransaction {
             if (productoDao.contarPorCodigo(producto.codigo, producto.id) > 0) {
@@ -61,8 +56,6 @@ class InventarioRepository(private val db: KaijuDatabase) {
 
     suspend fun eliminarProducto(producto: Producto) = productoDao.eliminar(producto)
 
-    // Registra un movimiento y actualiza el stock del producto en UNA sola transacción:
-    // o se guardan las dos cosas, o no se guarda ninguna.
     suspend fun registrarMovimiento(
         productoId: Long,
         tipo: TipoMovimiento,
@@ -93,7 +86,6 @@ class InventarioRepository(private val db: KaijuDatabase) {
         Result.success(Unit)
     }
 
-    // Carga el catálogo ficticio la primera vez que se abre la app (base de datos vacía).
     suspend fun sembrarDatosDeEjemploSiVacio() {
         if (productoDao.contar() > 0) return
         val ahora = System.currentTimeMillis()

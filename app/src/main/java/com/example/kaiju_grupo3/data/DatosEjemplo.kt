@@ -4,7 +4,7 @@ package com.example.kaiju_grupo3.data
 import com.example.kaiju_grupo3.model.Producto
 import com.example.kaiju_grupo3.model.TipoMovimiento
 
-// Catálogo y movimientos FICTICIOS para probar la app
+// catologo y movimientos INVENTADO para probar la app
 data class MovimientoEjemplo(
     val diasAtras: Int,
     val tipo: TipoMovimiento,
@@ -14,7 +14,7 @@ data class MovimientoEjemplo(
 
 data class ProductoEjemplo(
     val producto: Producto,
-    val movimientos: List<MovimientoEjemplo>   // en orden (del más antiguo al más nuevo)
+    val movimientos: List<MovimientoEjemplo>
 )
 
 object DatosEjemplo {

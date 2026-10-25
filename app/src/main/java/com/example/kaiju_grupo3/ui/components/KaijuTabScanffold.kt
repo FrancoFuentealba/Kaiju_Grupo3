@@ -47,9 +47,7 @@ private val tabs = listOf(
     TabItem(Screen.Profile, "Perfil", Icons.Filled.Person)
 )
 
-// Estructura común de las 3 pestañas principales:
-// barra superior con botón de menú + menú lateral (drawer) + barra de navegación inferior.
-// Como solo hay UN Scaffold por pantalla, no se duplican los márgenes del sistema.
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun KaijuTabScaffold(
@@ -120,8 +118,7 @@ fun KaijuTabScaffold(
                             selected = tab.pantalla == tabActual,
                             onClick = {
                                 if (tab.pantalla != tabActual) {
-                                    // La pila siempre parte de Inventario: así "atrás" desde otra pestaña
-                                    // vuelve al inventario y no se acumulan pantallas repetidas.
+
                                     viewModel.navigateTo(
                                         screen = tab.pantalla,
                                         popUpTo = Screen.Inventario,

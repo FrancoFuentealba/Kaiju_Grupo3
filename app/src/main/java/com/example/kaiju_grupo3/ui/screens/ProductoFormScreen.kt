@@ -47,7 +47,7 @@ import com.example.kaiju_grupo3.ui.components.SelectorFoto
 import com.example.kaiju_grupo3.viewmodel.MainViewModel
 import com.example.kaiju_grupo3.viewmodel.ProductoFormViewModel
 
-// Formulario de alta (productoId = null) y de edición (productoId = id) de un producto.
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductoFormScreen(
@@ -102,7 +102,6 @@ fun ProductoFormScreen(
                     .padding(16.dp),
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
-                // ----- Foto (guía 13) -----
                 SelectorFoto(
                     fotoUri = estado.fotoUri,
                     onFotoDesdeCamara = viewModel::onFotoDesdeCamara,
@@ -110,8 +109,6 @@ fun ProductoFormScreen(
                     onQuitarFoto = viewModel::quitarFoto
                 )
                 Spacer(Modifier.height(12.dp))
-
-                // ----- Datos generales -----
                 Text("Datos generales", style = MaterialTheme.typography.titleMedium)
                 CampoFormulario(
                     valor = estado.codigo,
@@ -164,8 +161,6 @@ fun ProductoFormScreen(
                         )
                     }
                 }
-
-                // ----- Precio y stock -----
                 Text(
                     text = "Precio y stock",
                     style = MaterialTheme.typography.titleMedium,
@@ -202,8 +197,6 @@ fun ProductoFormScreen(
                     ayuda = "Bajo este nivel se muestra la alerta de stock bajo",
                     teclado = KeyboardType.Number
                 )
-
-                // ----- Atributos opcionales -----
                 Text(
                     text = "Atributos opcionales",
                     style = MaterialTheme.typography.titleMedium,
@@ -243,8 +236,6 @@ fun ProductoFormScreen(
                     ayuda = "Formato AAAA-MM-DD (ej: 2027-01-20)",
                     accionTeclado = ImeAction.Done
                 )
-
-                // ----- Error general y botones -----
                 errores.general?.let {
                     Text(
                         text = it,

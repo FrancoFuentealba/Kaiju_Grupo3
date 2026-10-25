@@ -7,9 +7,6 @@ import androidx.room.Query
 import androidx.room.Update
 import com.example.kaiju_grupo3.model.Producto
 import kotlinx.coroutines.flow.Flow
-
-// DAO = interfaz con las consultas SQL sobre la tabla "productos".
-// Las funciones que devuelven Flow se actualizan solas cuando cambia la tabla.
 @Dao
 interface ProductoDao {
 

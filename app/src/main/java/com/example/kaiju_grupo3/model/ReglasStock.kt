@@ -1,18 +1,13 @@
 package com.example.kaiju_grupo3.model
-
-// Reglas de negocio del stock, separadas de Room y de la UI para probarlas en tests simples.
-
+// Reglas de negocio del stock, separadas de Room y de la UI para hacer pruebas
 object ReglasStock {
-
-    // Calcula cuánto stock queda después de aplicar un movimiento.
+    // Calcula cuanto stock queda después de aplicar un movimiento.
     fun calcularStockResultante(stockActual: Int, tipo: TipoMovimiento, cantidad: Int): Int =
         when (tipo) {
             TipoMovimiento.ENTRADA -> stockActual + cantidad
             TipoMovimiento.SALIDA, TipoMovimiento.VENTA -> stockActual - cantidad
-            TipoMovimiento.AJUSTE -> cantidad //  ajuste fija el stock al conteo real
+            TipoMovimiento.AJUSTE -> cantidad //  ajuste que  fija el stock del contro
         }
-
-    // Devuelve un mensaje de error si el movimiento no se puede registrar, o null si es válido.
     fun validarMovimiento(stockActual: Int, tipo: TipoMovimiento, cantidad: Int): String? {
         if (tipo == TipoMovimiento.AJUSTE) {
             return if (cantidad < 0) "El stock contado no puede ser negativo" else null

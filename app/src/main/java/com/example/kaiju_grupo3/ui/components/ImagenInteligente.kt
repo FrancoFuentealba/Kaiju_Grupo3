@@ -26,9 +26,6 @@ import com.example.kaiju_grupo3.ui.utils.cargarBitmap
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-// Componente reutilizable (guía 13): muestra la foto del producto en forma circular.
-// Si no hay foto (o no se puede leer), muestra un ícono de producto por defecto.
-// El tamaño lo define quien lo usa, con el parámetro modifier.
 @Composable
 fun ImagenInteligente(
     fotoUri: String?,

@@ -1,11 +1,6 @@
 package com.example.kaiju_grupo3.model
-
-// Reglas de validación del formulario de movimiento (funciones puras, fáciles de testear).
-// La regla de "no dejar stock negativo" se reutiliza desde ReglasStock.
 object ValidacionesMovimiento {
-
     const val CANTIDAD_MAXIMA = 1_000_000
-
     fun validar(
         producto: Producto?,
         tipo: TipoMovimiento,
@@ -20,7 +15,6 @@ object ValidacionesMovimiento {
             nota = if (nota.trim().length > 120) "Máximo 120 caracteres" else null
         )
     }
-
     private fun validarCantidad(producto: Producto, tipo: TipoMovimiento, texto: String): String? {
         val numero = texto.trim().toIntOrNull()
         return when {

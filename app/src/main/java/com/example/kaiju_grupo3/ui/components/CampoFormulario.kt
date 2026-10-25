@@ -10,8 +10,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 
-// Campo de texto de formulario: muestra el error debajo (en rojo) o, si no hay error, un texto de ayuda.
-// Se reutiliza en todos los formularios para no repetir el mismo OutlinedTextField.
+
 @Composable
 fun CampoFormulario(
     valor: String,

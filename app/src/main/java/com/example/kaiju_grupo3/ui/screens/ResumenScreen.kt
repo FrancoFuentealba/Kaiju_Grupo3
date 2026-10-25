@@ -1,8 +1,10 @@
 package com.example.kaiju_grupo3.ui.screens
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -10,11 +12,15 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.example.kaiju_grupo3.navigation.Screen
 import com.example.kaiju_grupo3.viewmodel.UsuarioViewModel
 
 @Composable
-fun ResumenScreen(viewModel: UsuarioViewModel) {
-    // Lee el MISMO ViewModel que usa el registro, por eso ve los mismos datos
+fun ResumenScreen(
+    navController: NavController,
+    viewModel: UsuarioViewModel
+) {
     val estado by viewModel.estado.collectAsState()
 
     Column(Modifier.safeDrawingPadding().padding(16.dp)) {
@@ -24,5 +30,16 @@ fun ResumenScreen(viewModel: UsuarioViewModel) {
         Text("Dirección: ${estado.direccion}")
         Text("Contraseña: ${"*".repeat(estado.clave.length)}")
         Text("Términos: ${if (estado.aceptaTerminos) "Aceptados" else "No aceptados"}")
+
+        Button(
+            onClick = {
+                navController.navigate(Screen.Login.route) {
+                    popUpTo(Screen.Login.route) { inclusive = true }
+                }
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Ir a iniciar sesión")
+        }
     }
 }

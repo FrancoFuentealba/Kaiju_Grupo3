@@ -23,7 +23,7 @@ data class Movimiento(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val productoId: Long,
     val tipo: TipoMovimiento,
-    val cantidad: Int,          // siempre positiva; en un AJUSTE es el nuevo stock contado
+    val cantidad: Int,          // siempre positiva, en un AJUSTE es el nuevo stock contado
     val stockResultante: Int,   // stock que quedó después del movimiento
     val fecha: Long = System.currentTimeMillis(),
     val nota: String = ""

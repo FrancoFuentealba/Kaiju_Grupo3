@@ -22,8 +22,6 @@ import androidx.compose.ui.unit.dp
 import com.example.kaiju_grupo3.navigation.Screen
 import com.example.kaiju_grupo3.ui.components.KaijuTabScaffold
 import com.example.kaiju_grupo3.viewmodel.MainViewModel
-
-// Pestaña "Perfil". Los datos son ficticios (el caso prohíbe usar datos personales reales).
 @Composable
 fun ProfileScreen(viewModel: MainViewModel) {
     KaijuTabScaffold(

@@ -5,7 +5,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -38,13 +39,13 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             Kaiju_grupo3Theme {
-                // ViewModels a nivel de Activity: se comparten entre pantallas.
+                // ViewModels, como se comparten entre pantallas.
                 val mainViewModel: MainViewModel = viewModel()
                 val usuarioViewModel: UsuarioViewModel = viewModel()          // Registro y Resumen
                 val inventarioViewModel: InventarioViewModel = viewModel()    // Inventario, Movimientos y Detalle
                 val navController = rememberNavController()
 
-                // Escucha los eventos de navegación que emite el MainViewModel.
+                // Comunicacion entre los eventos de la nevagacion en la app
                 LaunchedEffect(Unit) {
                     mainViewModel.navigationEvents.collectLatest { event ->
                         when (event) {
@@ -62,8 +63,11 @@ class MainActivity : ComponentActivity() {
                     }
                 }
 
-                // Cada pantalla maneja su propio padding (KaijuTabScaffold / safeDrawingPadding)
-                Scaffold(modifier = Modifier.fillMaxSize()) { _ ->
+                // Cada pantalla maneja su propio PADDING
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
                     NavHost(
                         navController = navController,
                         startDestination = Screen.Login.route
@@ -75,10 +79,8 @@ class MainActivity : ComponentActivity() {
                             RegistroScreen(navController = navController, viewModel = usuarioViewModel)
                         }
                         composable(Screen.Resumen.route) {
-                            ResumenScreen(viewModel = usuarioViewModel)
+                            ResumenScreen(navController = navController, viewModel = usuarioViewModel)
                         }
-
-                        // --- Pestañas principales ---
                         composable(Screen.Inventario.route) {
                             MainInventarioScreen(mainViewModel, inventarioViewModel)
                         }
@@ -92,7 +94,6 @@ class MainActivity : ComponentActivity() {
                             SettingsScreen(viewModel = mainViewModel)
                         }
 
-                        // --- Pantalla con argumento: producto/{productoId} ---
                         composable(
                             route = Screen.Detalle.RUTA,
                             arguments = listOf(navArgument(Screen.Detalle.ARG_ID) { type = NavType.LongType })
@@ -100,8 +101,6 @@ class MainActivity : ComponentActivity() {
                             val id = backStackEntry.arguments?.getLong(Screen.Detalle.ARG_ID) ?: -1L
                             DetalleProductoScreen(id, mainViewModel, inventarioViewModel)
                         }
-
-                        // --- Formularios ---
                         composable(Screen.ProductoNuevo.route) {
                             ProductoFormScreen(productoId = null, mainViewModel = mainViewModel)
                         }

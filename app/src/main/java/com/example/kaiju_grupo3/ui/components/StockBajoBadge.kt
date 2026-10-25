@@ -16,7 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
-// Etiqueta roja "Stock bajo" que se muestra en productos bajo su stock mínimo.
+// solo se  muestra en productos que tengan bajo Stock.
 @Composable
 fun StockBajoBadge(modifier: Modifier = Modifier) {
     Surface(

@@ -57,7 +57,6 @@ private val LightColorScheme = lightColorScheme(
 @Composable
 fun Kaiju_grupo3Theme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Desactivado: con el color dinámico de Android 12+ se pierden los colores de marca de Kaiju.
     dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {

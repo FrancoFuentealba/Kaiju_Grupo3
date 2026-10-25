@@ -9,8 +9,7 @@ data class MovimientoFormEstado(
     val guardando: Boolean = false,
     val errores: MovimientoFormErrores = MovimientoFormErrores()
 ) {
-    // Stock que quedaría si se guardara ahora; null si la cantidad aún no es válida.
-    // Sirve para mostrar una vista previa antes de confirmar.
+    // Stock que quedaría si se guarda como un nulo un null,  si la cantidad aún no es válida.
     fun stockResultante(): Int? {
         val p = producto ?: return null
         val n = cantidad.trim().toIntOrNull() ?: return null

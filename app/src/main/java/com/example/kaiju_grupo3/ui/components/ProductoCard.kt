@@ -20,7 +20,6 @@ import com.example.kaiju_grupo3.model.Producto
 import com.example.kaiju_grupo3.model.stockBajo
 import com.example.kaiju_grupo3.ui.utils.formatearPrecio
 
-// Tarjeta de un producto en la lista de inventario.
 @Composable
 fun ProductoCard(
     producto: Producto,
@@ -35,7 +34,6 @@ fun ProductoCard(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            // Miniatura: foto del producto o ícono por defecto
             ImagenInteligente(
                 fotoUri = producto.fotoUri,
                 modifier = Modifier.size(56.dp),

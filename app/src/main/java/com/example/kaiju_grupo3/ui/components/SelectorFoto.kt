@@ -32,9 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import com.example.kaiju_grupo3.data.FotoStorage
 
-// Foto del producto: muestra la imagen y dos botones (cámara y galería).
-// Usa los lanzadores modernos de la guía 13: TakePicture() y GetContent().
-// El resultado se entrega por callbacks al ViewModel; este componente no guarda estado de la foto.
+
 @Composable
 fun SelectorFoto(
     fotoUri: String?,
@@ -45,16 +43,14 @@ fun SelectorFoto(
 ) {
     val context = LocalContext.current
 
-    // Uri donde la cámara está guardando la foto. rememberSaveable la conserva si se gira la pantalla.
     var uriCamara by rememberSaveable { mutableStateOf<Uri?>(null) }
 
-    // --- Cámara: TakePicture devuelve true si el usuario aceptó la foto, false si canceló ---
     val camaraLauncher = rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { exito ->
         val uri = uriCamara
         if (exito && uri != null) {
             onFotoDesdeCamara(uri)
         } else {
-            // Canceló: se borra el archivo vacío que se había reservado.
+
             FotoStorage.eliminar(context, uri?.toString())
         }
         uriCamara = null

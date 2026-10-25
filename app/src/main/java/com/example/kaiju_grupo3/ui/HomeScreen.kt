@@ -26,15 +26,13 @@ fun HomeScreen() {
                 .fillMaxSize()
                 .padding(innerPadding)
                 .padding(16.dp),
-            //espaciado entre elementos
             verticalArrangement = Arrangement.spacedBy(20.dp)
-        ) { //Elemento de texto con colores
+        ) {
             Text(
             text = "¡Bienvenido!",
             color = MaterialTheme.colorScheme.primary,
             style = MaterialTheme.typography.titleLarge
         )
-        //Otro elemento visual
         Text(
             text = "Gestion de inventario activa.",
             color = MaterialTheme.colorScheme.secondary
@@ -42,7 +40,7 @@ fun HomeScreen() {
         Button(onClick = {/*accion futura*/}) {
             Text("Presionar")
         }
-            //imagen cargada
+            //logo de la App
         Image(
             painter = painterResource(id = R.drawable.logo_inventa),
             contentDescription = "Logo App",

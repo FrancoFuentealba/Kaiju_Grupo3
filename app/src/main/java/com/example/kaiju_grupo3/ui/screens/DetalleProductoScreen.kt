@@ -44,7 +44,7 @@ import com.example.kaiju_grupo3.ui.utils.formatearPrecio
 import com.example.kaiju_grupo3.viewmodel.InventarioViewModel
 import com.example.kaiju_grupo3.viewmodel.MainViewModel
 
-// Detalle de un producto: foto, datos, nivel de stock e historial de sus movimientos.
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetalleProductoScreen(
@@ -52,7 +52,6 @@ fun DetalleProductoScreen(
     mainViewModel: MainViewModel,
     inventarioViewModel: InventarioViewModel
 ) {
-    // remember(productoId): el flujo se crea una vez por producto, no en cada recomposición.
     val flujoProducto = remember(productoId) { inventarioViewModel.producto(productoId) }
     val flujoMovimientos = remember(productoId) { inventarioViewModel.movimientosDe(productoId) }
     val producto by flujoProducto.collectAsStateWithLifecycle(initialValue = null)
@@ -103,7 +102,6 @@ fun DetalleProductoScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(innerPadding),
-                // Espacio abajo para que el botón flotante no tape el último movimiento
                 contentPadding = PaddingValues(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 88.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
@@ -161,7 +159,7 @@ fun DetalleProductoScreen(
                 )
                 if (bajo) StockBajoBadge()
             }
-            // La barra llena indica stock >= 2 veces el mínimo.
+
             LinearProgressIndicator(
                 progress = {
                     (producto.stock.toFloat() / (producto.stockMinimo * 2).coerceAtLeast(1)).coerceIn(0f, 1f)

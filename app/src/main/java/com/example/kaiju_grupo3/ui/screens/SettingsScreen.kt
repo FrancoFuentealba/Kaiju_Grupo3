@@ -35,9 +35,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.kaiju_grupo3.viewmodel.EstadoViewModel
 import com.example.kaiju_grupo3.viewmodel.MainViewModel
-
-// Pantalla de configuración. Contiene el "Modo especial": un ajuste que se guarda en DataStore
-// persiste al cerrar la app y que muestra animaciones.
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(

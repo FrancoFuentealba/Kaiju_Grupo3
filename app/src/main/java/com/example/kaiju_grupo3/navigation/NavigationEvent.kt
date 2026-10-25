@@ -2,7 +2,7 @@ package com.example.kaiju_grupo3.navigation
 
 //representa los difernetes eventos de navegacion
 sealed class NavigationEvent {
-    //evento para navegar
+    //evento para poder navegar
     data class NavigateTo(
         val route: Screen,
         val popUpToRoute: Screen? = null,
@@ -13,6 +13,6 @@ sealed class NavigationEvent {
     //evento para volver a la pantalla anterior
     object PopBackStack : NavigationEvent()
 
-    //evento para navegar hacia "arriba"
+    //evento para navegar hacia "arriba" o deslisar hacia arriva.
     object NavigateUp : NavigationEvent()
 }

@@ -55,7 +55,6 @@ fun LoginScreen(navController: NavController) {
 
         Button(
             onClick = {
-                // entra al inventario y quita el login de la pila (no se vuelve con "atrás")
                 navController.navigate(Screen.Inventario.route) {
                     popUpTo(Screen.Login.route) { inclusive = true }
                 }

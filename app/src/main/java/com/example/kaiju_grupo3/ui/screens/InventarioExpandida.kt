@@ -48,7 +48,7 @@ fun InventarioExpandida(
             .fillMaxSize()
             .padding(innerPadding)
     ) {
-        // ----- Panel izquierdo -----
+
         LazyColumn(
             modifier = Modifier
                 .weight(0.4f)
@@ -85,7 +85,7 @@ fun InventarioExpandida(
 
         VerticalDivider()
 
-        // ----- Panel derecho -----
+
         Box(
             modifier = Modifier
                 .weight(0.6f)

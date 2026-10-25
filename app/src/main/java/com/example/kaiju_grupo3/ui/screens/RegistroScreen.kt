@@ -32,7 +32,6 @@ fun RegistroScreen(
     navController: NavController,
     viewModel: UsuarioViewModel
 ) {
-    // Observa el estado del ViewModel: la pantalla se actualiza sola cuando cambia
     val estado by viewModel.estado.collectAsState()
 
     Column(
@@ -44,8 +43,6 @@ fun RegistroScreen(
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Text("Registro de usuario", style = MaterialTheme.typography.headlineMedium)
-
-        // Campo nombre
         OutlinedTextField(
             value = estado.nombre,
             onValueChange = viewModel::onNombreChange,
@@ -56,8 +53,6 @@ fun RegistroScreen(
             },
             modifier = Modifier.fillMaxWidth()
         )
-
-        // Campo correo
         OutlinedTextField(
             value = estado.correo,
             onValueChange = viewModel::onCorreoChange,
@@ -68,8 +63,6 @@ fun RegistroScreen(
             },
             modifier = Modifier.fillMaxWidth()
         )
-
-        // Campo contraseña (oculta los caracteres)
         OutlinedTextField(
             value = estado.clave,
             onValueChange = viewModel::onClaveChange,
@@ -81,8 +74,6 @@ fun RegistroScreen(
             },
             modifier = Modifier.fillMaxWidth()
         )
-
-        // Campo dirección
         OutlinedTextField(
             value = estado.direccion,
             onValueChange = viewModel::onDireccionChange,
@@ -93,8 +84,6 @@ fun RegistroScreen(
             },
             modifier = Modifier.fillMaxWidth()
         )
-
-        // Checkbox de términos
         Row(verticalAlignment = Alignment.CenterVertically) {
             Checkbox(
                 checked = estado.aceptaTerminos,
@@ -106,8 +95,6 @@ fun RegistroScreen(
         estado.errores.terminos?.let {
             Text(it, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
         }
-
-        // Botón: si todo es válido, va al resumen
         Button(
             onClick = {
                 if (viewModel.validarFormulario()) {

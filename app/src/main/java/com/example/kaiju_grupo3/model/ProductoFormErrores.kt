@@ -1,6 +1,6 @@
 package com.example.kaiju_grupo3.model
 
-// Un mensaje de error por campo del formulario de producto (null = el campo está bien).
+// Un mensaje de error por campo del formulario de producto.
 data class ProductoFormErrores(
     val codigo: String? = null,
     val nombre: String? = null,
@@ -14,7 +14,7 @@ data class ProductoFormErrores(
     val modelo: String? = null,
     val lote: String? = null,
     val vencimiento: String? = null,
-    val general: String? = null     // errores que no pertenecen a un campo (ej: falla al guardar)
+    val general: String? = null     // errores que no pertenecen a un campo en concreto
 ) {
     fun hayErrores(): Boolean = listOfNotNull(
         codigo, nombre, descripcion, categoria, precio, stockInicial, stockMinimo,

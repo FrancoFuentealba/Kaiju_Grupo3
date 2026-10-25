@@ -47,7 +47,7 @@ import com.example.kaiju_grupo3.ui.components.CampoFormulario
 import com.example.kaiju_grupo3.viewmodel.MainViewModel
 import com.example.kaiju_grupo3.viewmodel.MovimientoFormViewModel
 
-// Formulario para registrar una entrada, salida, venta o ajuste de stock de un producto.
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MovimientoFormScreen(
@@ -141,8 +141,6 @@ fun MovimientoFormScreen(
                     ayuda = if (esAjuste) "El stock quedará igual al conteo físico" else null,
                     teclado = KeyboardType.Number
                 )
-
-                // Vista previa: cómo quedaría el stock si se guarda ahora.
                 if (stockResultante != null) {
                     Text(
                         text = "Stock actual ${producto.stock} → quedará en $stockResultante",

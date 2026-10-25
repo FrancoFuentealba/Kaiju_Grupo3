@@ -21,7 +21,7 @@ import com.example.kaiju_grupo3.ui.components.MovimientoCard
 import com.example.kaiju_grupo3.viewmodel.InventarioViewModel
 import com.example.kaiju_grupo3.viewmodel.MainViewModel
 
-// Pestaña "Movimientos": historial de todas las entradas, salidas, ventas y ajustes.
+
 @Composable
 fun MovimientosScreen(
     mainViewModel: MainViewModel,

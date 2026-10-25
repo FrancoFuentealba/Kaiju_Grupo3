@@ -1,12 +1,9 @@
 package com.example.kaiju_grupo3.model
 
-// Opciones para el campo "tipo de producto".
 val TIPOS_PRODUCTO = listOf("Producto terminado", "Insumo", "Perecible")
 
-// Estado del formulario de producto. Todo se guarda como texto (lo que escribe el usuario)
-// y se convierte a número recién al validar y guardar.
 data class ProductoFormEstado(
-    val id: Long = 0,                       // 0 = producto nuevo; otro valor = editando ese producto
+    val id: Long = 0,
     val codigo: String = "",
     val nombre: String = "",
     val descripcion: String = "",

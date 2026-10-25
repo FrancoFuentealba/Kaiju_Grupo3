@@ -111,7 +111,7 @@ fun HomeScreen(
                     }
                 }
 
-                // ------------------ Tu código anterior (Sin la llave sobrante) ------------------
+
                 Spacer(modifier = Modifier.height(32.dp))
                 Text(text = "Bienvenido a la pagina de Inicio (MVVM)")
                 Spacer(modifier = Modifier.height(16.dp))
