@@ -8,6 +8,17 @@ import com.example.kaiju_grupo3.model.Producto
 import com.example.kaiju_grupo3.model.ReglasStock
 import com.example.kaiju_grupo3.model.TipoMovimiento
 import kotlinx.coroutines.flow.Flow
+import com.example.kaiju_grupo3.model.Post
+import com.example.kaiju_grupo3.remote.RetrofitInstance
+
+
+
+//METODO POST
+class PostRepository {
+    suspend fun getPosts(): List<Post>{
+        return RetrofitInstance.api.getPosts()
+    }
+}
 
 class CodigoDuplicadoException(codigo: String) :
     Exception("Ya existe un producto con el código $codigo")
