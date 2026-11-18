@@ -1,7 +1,9 @@
 package com.example.kaiju_grupo3.ui.screens
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material3.Button
@@ -17,10 +19,8 @@ import com.example.kaiju_grupo3.navigation.Screen
 import com.example.kaiju_grupo3.viewmodel.UsuarioViewModel
 
 @Composable
-fun ResumenScreen(
-    navController: NavController,
-    viewModel: UsuarioViewModel
-) {
+fun ResumenScreen(navController: NavController, viewModel: UsuarioViewModel) {
+    // Lee el MISMO ViewModel que usa el registro, por eso ve los mismos datos
     val estado by viewModel.estado.collectAsState()
 
     Column(Modifier.safeDrawingPadding().padding(16.dp)) {
@@ -31,15 +31,18 @@ fun ResumenScreen(
         Text("Contraseña: ${"*".repeat(estado.clave.length)}")
         Text("Términos: ${if (estado.aceptaTerminos) "Aceptados" else "No aceptados"}")
 
+        Spacer(Modifier.height(24.dp))
+
+        // Cuenta creada: entra a la app y borra login, registro y resumen de la pila.
         Button(
             onClick = {
-                navController.navigate(Screen.Login.route) {
+                navController.navigate(Screen.Inventario.route) {
                     popUpTo(Screen.Login.route) { inclusive = true }
                 }
             },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Ir a iniciar sesión")
+            Text("Continuar a la app")
         }
     }
 }

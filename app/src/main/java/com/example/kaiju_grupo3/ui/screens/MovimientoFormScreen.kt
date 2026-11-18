@@ -1,6 +1,7 @@
 package com.example.kaiju_grupo3.ui.screens
 
 import android.widget.Toast
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -47,7 +48,7 @@ import com.example.kaiju_grupo3.ui.components.CampoFormulario
 import com.example.kaiju_grupo3.viewmodel.MainViewModel
 import com.example.kaiju_grupo3.viewmodel.MovimientoFormViewModel
 
-
+// Formulario para registrar una entrada, salida, venta o ajuste de stock de un producto.
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MovimientoFormScreen(
@@ -141,9 +142,11 @@ fun MovimientoFormScreen(
                     ayuda = if (esAjuste) "El stock quedará igual al conteo físico" else null,
                     teclado = KeyboardType.Number
                 )
-                if (stockResultante != null) {
+
+                // Vista previa: cómo quedaría el stock si se guarda ahora.
+                AnimatedVisibility(visible = stockResultante != null) {
                     Text(
-                        text = "Stock actual ${producto.stock} → quedará en $stockResultante",
+                        text = "Stock actual ${producto.stock} → quedará en ${stockResultante ?: producto.stock}",
                         style = MaterialTheme.typography.titleSmall,
                         color = MaterialTheme.colorScheme.tertiary
                     )
