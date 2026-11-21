@@ -15,6 +15,7 @@ sealed class Screen(val route: String) {
 
     // --- Otras pantallas ---
     data object Settings : Screen(route = "settings_page")
+    data object Posts : Screen(route = "posts_page")
 
     // --- Formularios ---
     data object ProductoNuevo : Screen(route = "producto_nuevo")

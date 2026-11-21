@@ -58,6 +58,13 @@ fun ProfileScreen(viewModel: MainViewModel) {
                 Text("Configuración")
             }
             Spacer(Modifier.height(8.dp))
+            Button(
+                onClick = { viewModel.navigateTo(Screen.Posts) },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("Ver posts (API)")
+            }
+            Spacer(Modifier.height(8.dp))
             OutlinedButton(
                 onClick = {
                     viewModel.navigateTo(Screen.Login, popUpTo = Screen.Inventario, inclusive = true)

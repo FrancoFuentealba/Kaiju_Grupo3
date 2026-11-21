@@ -13,12 +13,7 @@ import com.example.kaiju_grupo3.remote.RetrofitInstance
 
 
 
-//METODO POST
-class PostRepository {
-    suspend fun getPosts(): List<Post>{
-        return RetrofitInstance.api.getPosts()
-    }
-}
+
 
 class CodigoDuplicadoException(codigo: String) :
     Exception("Ya existe un producto con el código $codigo")

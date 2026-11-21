@@ -31,6 +31,9 @@ import com.example.kaiju_grupo3.viewmodel.InventarioViewModel
 import com.example.kaiju_grupo3.viewmodel.MainViewModel
 import com.example.kaiju_grupo3.viewmodel.UsuarioViewModel
 import kotlinx.coroutines.flow.collectLatest
+import com.example.kaiju_grupo3.viewmodel.PostViewModel
+import com.example.kaiju_grupo3.ui.screens.PostScreen
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,6 +45,7 @@ class MainActivity : ComponentActivity() {
                 val mainViewModel: MainViewModel = viewModel()
                 val usuarioViewModel: UsuarioViewModel = viewModel()          // Registro y Resumen
                 val inventarioViewModel: InventarioViewModel = viewModel()    // Inventario, Movimientos y Detalle
+                val postViewModel: PostViewModel = viewModel()
                 val navController = rememberNavController()
 
                 // Escucha los eventos de navegación que emite el MainViewModel.
@@ -142,6 +146,10 @@ class MainActivity : ComponentActivity() {
                     composable(route = Screen.Settings.route) {
                         SettingsScreen(viewModel = mainViewModel)
                     }
+                    composable(route = Screen.Posts.route) {
+                        PostScreen(postViewModel = postViewModel, mainViewModel = mainViewModel)
+                    }
+
                 }
             }
         }
