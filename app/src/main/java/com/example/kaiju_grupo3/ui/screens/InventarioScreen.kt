@@ -37,19 +37,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.kaiju_grupo3.model.ResumenInventario
 import com.example.kaiju_grupo3.navigation.Screen
+import com.example.kaiju_grupo3.ui.components.DolarCard
 import com.example.kaiju_grupo3.ui.components.KaijuTabScaffold
 import com.example.kaiju_grupo3.ui.components.ProductoCard
 import com.example.kaiju_grupo3.ui.utils.obtenerWindowSizeClass
+import com.example.kaiju_grupo3.viewmodel.DolarViewModel
 import com.example.kaiju_grupo3.viewmodel.InventarioViewModel
 import com.example.kaiju_grupo3.viewmodel.MainViewModel
 
-// Pestaña principal: resumen, búsqueda, filtro de stock bajo y lista de productos.
+// Pestaña principal: dólar, resumen, búsqueda, filtro de stock bajo y lista de productos.
 @Composable
 fun InventarioScreen(
     mainViewModel: MainViewModel,
-    inventarioViewModel: InventarioViewModel
+    inventarioViewModel: InventarioViewModel,
+    dolarViewModel: DolarViewModel = viewModel()
 ) {
     val productos by inventarioViewModel.productos.collectAsStateWithLifecycle()
     val busqueda by inventarioViewModel.busqueda.collectAsStateWithLifecycle()
@@ -57,6 +61,11 @@ fun InventarioScreen(
     val resumen by inventarioViewModel.resumen.collectAsStateWithLifecycle()
     val cargando by inventarioViewModel.cargando.collectAsStateWithLifecycle()
     val errorSync by inventarioViewModel.errorSync.collectAsStateWithLifecycle()
+
+    // Estado de la API externa del dólar (mindicador.cl)
+    val dolar by dolarViewModel.dolar.collectAsStateWithLifecycle()
+    val cargandoDolar by dolarViewModel.cargando.collectAsStateWithLifecycle()
+    val errorDolar by dolarViewModel.error.collectAsStateWithLifecycle()
 
     // Diseño adaptable 1 columna en teléfono, 2 en tablet pequeña, 3 en pantalla grande.
     val columnas = when (obtenerWindowSizeClass().widthSizeClass) {
@@ -86,6 +95,16 @@ fun InventarioScreen(
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             // Los ítems con span = maxLineSpan ocupan todo el ancho de la grilla.
+
+            // Tarjeta del dólar (API externa)
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                DolarCard(
+                    dolar = dolar,
+                    cargando = cargandoDolar,
+                    error = errorDolar,
+                    onReintentar = { dolarViewModel.cargarDolar() }
+                )
+            }
             item(span = { GridItemSpan(maxLineSpan) }) {
                 ResumenInventarioCard(resumen)
             }
