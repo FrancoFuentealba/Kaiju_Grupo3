@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import androidx.room.Upsert
 import com.example.kaiju_grupo3.model.Producto
 import kotlinx.coroutines.flow.Flow
 @Dao
@@ -28,6 +29,20 @@ interface ProductoDao {
 
     @Insert
     suspend fun insertar(producto: Producto): Long
+
+    // Inserta o actualiza SIN borrar la fila (así no se pierden los movimientos por el ON DELETE CASCADE).
+    @Upsert
+    suspend fun upsert(producto: Producto)
+
+    @Upsert
+    suspend fun upsertTodos(productos: List<Producto>)
+
+    @Query("SELECT * FROM productos")
+    suspend fun obtenerTodos(): List<Producto>
+
+    // Borra los productos que el servidor ya no tiene.
+    @Query("DELETE FROM productos WHERE id NOT IN (:ids)")
+    suspend fun eliminarQueNoEstan(ids: List<Long>)
 
     @Update
     suspend fun actualizar(producto: Producto)
