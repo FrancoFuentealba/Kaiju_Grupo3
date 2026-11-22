@@ -20,6 +20,8 @@ import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
@@ -54,6 +56,7 @@ fun InventarioScreen(
     val soloStockBajo by inventarioViewModel.soloStockBajo.collectAsStateWithLifecycle()
     val resumen by inventarioViewModel.resumen.collectAsStateWithLifecycle()
     val cargando by inventarioViewModel.cargando.collectAsStateWithLifecycle()
+    val errorSync by inventarioViewModel.errorSync.collectAsStateWithLifecycle()
 
     // Diseño adaptable 1 columna en teléfono, 2 en tablet pequeña, 3 en pantalla grande.
     val columnas = when (obtenerWindowSizeClass().widthSizeClass) {
@@ -86,6 +89,28 @@ fun InventarioScreen(
             item(span = { GridItemSpan(maxLineSpan) }) {
                 ResumenInventarioCard(resumen)
             }
+            // Aviso si no se pudo hablar con el servidor: se muestran los datos guardados en el teléfono.
+            if (errorSync != null) {
+                item(span = { GridItemSpan(maxLineSpan) }) {
+                    ElevatedCard(
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = CardDefaults.elevatedCardColors(containerColor = MaterialTheme.colorScheme.errorContainer)
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(start = 16.dp, top = 4.dp, end = 4.dp, bottom = 4.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = "$errorSync. Mostrando los datos guardados.",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onErrorContainer,
+                                modifier = Modifier.weight(1f)
+                            )
+                            TextButton(onClick = { inventarioViewModel.sincronizar() }) { Text("Reintentar") }
+                        }
+                    }
+                }
+            }
             item(span = { GridItemSpan(maxLineSpan) }) {
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     OutlinedTextField(
@@ -111,7 +136,7 @@ fun InventarioScreen(
                 }
             }
 
-            if (cargando) {
+            if (cargando && productos.isEmpty()) {
                 item(span = { GridItemSpan(maxLineSpan) }) {
                     Box(Modifier.fillMaxWidth().padding(32.dp), contentAlignment = Alignment.Center) {
                         CircularProgressIndicator()

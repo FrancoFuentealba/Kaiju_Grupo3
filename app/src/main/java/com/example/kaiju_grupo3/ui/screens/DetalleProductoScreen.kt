@@ -1,5 +1,12 @@
 package com.example.kaiju_grupo3.ui.screens
 
+import android.widget.Toast
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -57,6 +64,33 @@ fun DetalleProductoScreen(
     val producto by flujoProducto.collectAsStateWithLifecycle(initialValue = null)
     val movimientos by flujoMovimientos.collectAsStateWithLifecycle(initialValue = emptyList())
 
+    val context = LocalContext.current
+    var mostrarConfirmacion by remember { mutableStateOf(false) }
+    val productoABorrar = producto
+
+    if (mostrarConfirmacion && productoABorrar != null) {
+        AlertDialog(
+            onDismissRequest = { mostrarConfirmacion = false },
+            title = { Text("Eliminar producto") },
+            text = {
+                Text("Se eliminará \"${productoABorrar.nombre}\" y todo su historial de movimientos. Esta acción no se puede deshacer.")
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    mostrarConfirmacion = false
+                    inventarioViewModel.eliminarProducto(
+                        producto = productoABorrar,
+                        onExito = { mainViewModel.navigationBack() },
+                        onError = { Toast.makeText(context, it, Toast.LENGTH_LONG).show() }
+                    )
+                }) { Text("Eliminar") }
+            },
+            dismissButton = {
+                TextButton(onClick = { mostrarConfirmacion = false }) { Text("Cancelar") }
+            }
+        )
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -69,6 +103,9 @@ fun DetalleProductoScreen(
                 actions = {
                     IconButton(onClick = { mainViewModel.navigateTo(Screen.ProductoEditar(productoId)) }) {
                         Icon(Icons.Filled.Edit, contentDescription = "Editar producto")
+                    }
+                    IconButton(onClick = { mostrarConfirmacion = true }) {
+                        Icon(Icons.Filled.Delete, contentDescription = "Eliminar producto")
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
