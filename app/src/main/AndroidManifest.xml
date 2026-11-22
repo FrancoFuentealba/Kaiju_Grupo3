@@ -5,7 +5,7 @@
 
     <!--  La cámara no es obligatoria para instalar la app (por ejemplo, en un emulador)  -->
     <uses-feature android:name="android.hardware.camera" android:required="false"/>
-    <application android:allowBackup="true" android:dataExtractionRules="@xml/data_extraction_rules" android:fullBackupContent="@xml/backup_rules" android:icon="@mipmap/ic_launcher" android:label="@string/app_name" android:roundIcon="@mipmap/ic_launcher_round" android:supportsRtl="true" android:theme="@style/Theme.Kaiju_grupo3">
+    <application android:usesCleartextTraffic="true" android:allowBackup="true" android:dataExtractionRules="@xml/data_extraction_rules" android:fullBackupContent="@xml/backup_rules" android:icon="@mipmap/ic_launcher" android:label="@string/app_name" android:roundIcon="@mipmap/ic_launcher_round" android:supportsRtl="true" android:theme="@style/Theme.Kaiju_grupo3">
         <!--  FileProvider: permite que la app de cámara guarde la foto en la carpeta privada de la app  -->
         <provider android:name="androidx.core.content.FileProvider" android:authorities="${applicationId}.fileprovider" android:exported="false" android:grantUriPermissions="true">
             <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/file_paths"/>
