@@ -15,9 +15,10 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 // Formulario para registrar un movimiento (entrada, salida, venta o ajuste) de un producto.
-class MovimientoFormViewModel(application: Application) : AndroidViewModel(application) {
-
-    private val repositorio = InventarioRepository(KaijuDatabase.obtener(application))
+class MovimientoFormViewModel @JvmOverloads constructor(
+    application: Application,
+    private val repositorio: InventarioRepository = InventarioRepository(KaijuDatabase.obtener(application))
+) : AndroidViewModel(application) {
 
     private val _estado = MutableStateFlow(MovimientoFormEstado())
     val estado: StateFlow<MovimientoFormEstado> = _estado.asStateFlow()

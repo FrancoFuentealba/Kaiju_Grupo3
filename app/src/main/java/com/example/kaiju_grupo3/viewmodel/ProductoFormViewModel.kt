@@ -21,9 +21,10 @@ import kotlinx.coroutines.launch
 //  - un estado (StateFlow) con lo que escribe el usuario y los errores de cada campo
 //  - funciones onXChange que guardan el valor y borran el error de ese campo
 //  - validarFormulario() que revisa todo y devuelve true/false
-class ProductoFormViewModel(application: Application) : AndroidViewModel(application) {
-
-    private val repositorio = InventarioRepository(KaijuDatabase.obtener(application))
+class ProductoFormViewModel @JvmOverloads constructor(
+    application: Application,
+    private val repositorio: InventarioRepository = InventarioRepository(KaijuDatabase.obtener(application))
+) : AndroidViewModel(application) {
 
     private val _estado = MutableStateFlow(ProductoFormEstado())
     val estado: StateFlow<ProductoFormEstado> = _estado.asStateFlow()

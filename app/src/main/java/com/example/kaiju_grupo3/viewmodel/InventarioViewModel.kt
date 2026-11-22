@@ -3,6 +3,7 @@ package com.example.kaiju_grupo3.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.kaiju_grupo3.data.FotoStorage
 import com.example.kaiju_grupo3.data.KaijuDatabase
 import com.example.kaiju_grupo3.model.Movimiento
 import com.example.kaiju_grupo3.model.MovimientoConNombre
@@ -21,9 +22,10 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 // Estado del inventario para las pantallas. Extiende AndroidViewModel porque Room necesita el contexto.
-class InventarioViewModel(application: Application) : AndroidViewModel(application) {
-
-    private val repositorio = InventarioRepository(KaijuDatabase.obtener(application))
+class InventarioViewModel @JvmOverloads constructor(
+    application: Application,
+    private val repositorio: InventarioRepository = InventarioRepository(KaijuDatabase.obtener(application))
+) : AndroidViewModel(application) {
 
     // ----- Estado de los filtros (lo que escribe/selecciona el usuario) -----
     private val _busqueda = MutableStateFlow("")
@@ -70,11 +72,33 @@ class InventarioViewModel(application: Application) : AndroidViewModel(applicati
         movs.map { MovimientoConNombre(it, nombres[it.productoId] ?: "Producto eliminado") }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
+    // Mensaje cuando la última sincronización con el servidor falló (null = todo bien).
+    private val _errorSync = MutableStateFlow<String?>(null)
+    val errorSync: StateFlow<String?> = _errorSync.asStateFlow()
+
     init {
-        // Primera vez que se abre la app: carga el catálogo ficticio.
+        sincronizar()
+    }
+
+    // Descarga los datos del servidor a Room. Si falla, la app sigue mostrando lo que ya tiene guardado.
+    fun sincronizar() {
         viewModelScope.launch {
-            repositorio.sembrarDatosDeEjemploSiVacio()
+            _errorSync.value = null
+            val resultado = repositorio.sincronizar()
+            _errorSync.value = resultado.exceptionOrNull()?.message
             _cargando.value = false
+        }
+    }
+
+    // Elimina el producto en el servidor y en Room (y su foto local).
+    fun eliminarProducto(producto: Producto, onExito: () -> Unit, onError: (String) -> Unit) {
+        viewModelScope.launch {
+            repositorio.eliminarProducto(producto)
+                .onSuccess {
+                    FotoStorage.eliminar(getApplication<Application>(), producto.fotoUri)
+                    onExito()
+                }
+                .onFailure { onError(it.message ?: "No se pudo eliminar el producto") }
         }
     }
 
