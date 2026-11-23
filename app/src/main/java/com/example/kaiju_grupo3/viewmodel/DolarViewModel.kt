@@ -9,23 +9,18 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class DolarViewModel : ViewModel() {
-
-    private val repository = DolarRepository()
-
+class DolarViewModel @JvmOverloads constructor(
+    private val repository: DolarRepository = DolarRepository()
+) : ViewModel() {
     private val _dolar = MutableStateFlow<ValorIndicador?>(null)
     val dolar: StateFlow<ValorIndicador?> = _dolar.asStateFlow()
-
     private val _cargando = MutableStateFlow(true)
     val cargando: StateFlow<Boolean> = _cargando.asStateFlow()
-
     private val _error = MutableStateFlow<String?>(null)
     val error: StateFlow<String?> = _error.asStateFlow()
-
     init {
         cargarDolar()
     }
-
     fun cargarDolar() {
         viewModelScope.launch {
             _cargando.value = true

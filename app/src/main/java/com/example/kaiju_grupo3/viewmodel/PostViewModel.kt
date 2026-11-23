@@ -9,9 +9,11 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 
-class PostViewModel : ViewModel() {
+class PostViewModel @JvmOverloads constructor(
+    private val repository: PostRepository = PostRepository()
+) : ViewModel() {
 
-    private val repository = PostRepository()
+
 
     private val _postList = MutableStateFlow<List<Post>>(emptyList())
     val postList: StateFlow<List<Post>> = _postList

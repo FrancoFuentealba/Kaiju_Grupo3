@@ -21,10 +21,20 @@ android {
     }
 
     buildTypes {
+        debug {
+            // Activa JaCoCo en los tests unitarios (genera el reporte de cobertura)
+            enableUnitTestCoverage = true
+        }
         release {
             optimization {
                 enable = false
             }
+        }
+    }
+    testOptions {
+        unitTests {
+            // Las clases de Android (Log, Uri, etc.) no fallan en los tests, devuelven valores por defecto
+            isReturnDefaultValues = true
         }
     }
     compileOptions {
